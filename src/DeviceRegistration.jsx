@@ -39,6 +39,7 @@ const DeviceRegistration = () => {
     e.preventDefault();
     setErrorMsg(null);
     if (!nickname.trim()) return;
+
     const trimmed = nickname.trim();
     const { error } = await supabase.from('devices').insert({
       device_id: deviceId,
