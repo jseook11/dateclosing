@@ -1,11 +1,9 @@
-import RootPage from './RootPage'
+import DeviceRegistration from './DeviceRegistration';
 
 function App() {
   return (
-    <>
-    <RootPage/>
-    </>
-  )
+    <DeviceRegistration />
+  );
 }
 
-export default App
+export default App;

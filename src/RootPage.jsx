@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import supabase from './lib/supabase';
 
-const RootPage = () => {
-  const [deviceId, setDeviceId] = useState('');
+const RootPage = ({ deviceId: initialDeviceId = '', nickname: initialNickname = '' }) => {
+  const [deviceId, setDeviceId] = useState(initialDeviceId);
+  const [nickname, setNickname] = useState(initialNickname);
+  const [newNickname, setNewNickname] = useState(initialNickname);
+  const [editingNickname, setEditingNickname] = useState(false);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [answers, setAnswers] = useState({
@@ -14,10 +17,25 @@ const RootPage = () => {
 
   useEffect(() => {
     const detectAndCheckSubmission = async () => {
-      const fp = await FingerprintJS.load();
-      const result = await fp.get();
-      const id = result.visitorId;
+      let id = initialDeviceId;
+      if (!id) {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+        id = result.visitorId;
+      }
       setDeviceId(id);
+
+      if (!initialNickname) {
+        const { data: deviceData } = await supabase
+          .from('devices')
+          .select('nickname')
+          .eq('device_id', id)
+          .maybeSingle();
+        if (deviceData) {
+          setNickname(deviceData.nickname);
+          setNewNickname(deviceData.nickname);
+        }
+      }
 
       const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
       const { data, error } = await supabase
@@ -38,7 +56,7 @@ const RootPage = () => {
     };
 
     detectAndCheckSubmission();
-  }, []);
+  }, [initialDeviceId, initialNickname]);
 
   const handleRadioChange = (key, value) => {
     setAnswers(prev => ({
@@ -59,6 +77,24 @@ const RootPage = () => {
         detail: text
       }
     }));
+  };
+
+  const handleNicknameUpdate = async (e) => {
+    e.preventDefault();
+    const trimmed = newNickname.trim();
+    if (!trimmed) return;
+    const { error } = await supabase
+      .from('devices')
+      .update({ nickname: trimmed })
+      .eq('device_id', deviceId);
+
+    if (error) {
+      console.error('닉네임 업데이트 실패:', error.message);
+      alert('닉네임 수정에 실패했습니다.');
+    } else {
+      setNickname(trimmed);
+      setEditingNickname(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -93,6 +129,41 @@ const RootPage = () => {
   if (alreadySubmitted) {
     return (
       <div className="p-4 max-w-xl mx-auto">
+        <div className="mb-4">
+          {editingNickname ? (
+            <form onSubmit={handleNicknameUpdate} className="flex gap-2 items-center">
+              <input
+                className="border rounded p-1 flex-1"
+                value={newNickname}
+                onChange={(e) => setNewNickname(e.target.value)}
+              />
+              <button type="submit" className="px-2 py-1 bg-blue-500 text-white rounded">
+                저장
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingNickname(false);
+                  setNewNickname(nickname);
+                }}
+                className="px-2 py-1"
+              >
+                취소
+              </button>
+            </form>
+          ) : (
+            <p>
+              현재 닉네임: <span className="font-semibold">{nickname}</span>{' '}
+              <button
+                type="button"
+                onClick={() => setEditingNickname(true)}
+                className="text-blue-500 underline"
+              >
+                수정
+              </button>
+            </p>
+          )}
+        </div>
         <h2 className="text-xl font-semibold text-green-700">오늘은 이미 제출하셨습니다 😊</h2>
         {submittedData && (
           <div className="mt-4 space-y-2 bg-gray-100 p-4 rounded">
@@ -107,6 +178,41 @@ const RootPage = () => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
+      <div className="mb-4">
+        {editingNickname ? (
+          <form onSubmit={handleNicknameUpdate} className="flex gap-2 items-center">
+            <input
+              className="border rounded p-1 flex-1"
+              value={newNickname}
+              onChange={(e) => setNewNickname(e.target.value)}
+            />
+            <button type="submit" className="px-2 py-1 bg-blue-500 text-white rounded">
+              저장
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingNickname(false);
+                setNewNickname(nickname);
+              }}
+              className="px-2 py-1"
+            >
+              취소
+            </button>
+          </form>
+        ) : (
+          <p>
+            현재 닉네임: <span className="font-semibold">{nickname}</span>{' '}
+            <button
+              type="button"
+              onClick={() => setEditingNickname(true)}
+              className="text-blue-500 underline"
+            >
+              수정
+            </button>
+          </p>
+        )}
+      </div>
       <h1 className="text-2xl font-bold mb-4">오늘의 체크인</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {['pain', 'suggestion', 'question'].map((key) => (
