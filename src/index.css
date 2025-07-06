@@ -1,11 +1,11 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
-  color: #ececf1;
-  background-color: #343541;
+  color-scheme: light;
+  color: #111;
+  background-color: #f5f5f5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,22 +15,21 @@
 
 a {
   font-weight: 500;
-  color: #19c37d;
+  color: #646cff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #15a06f;
+  color: #535bf2;
 }
 
 body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  color: #ececf1;
-  background-color: #343541;
-  padding-top: 2rem;
+  color: #111;
+  background-color: #f5f5f5;
 }
 
 h1 {
@@ -39,39 +38,31 @@ h1 {
 }
 
 button {
-  border-radius: 4px;
-  border: none;
+  border-radius: 8px;
+  border: 1px solid #000;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #19c37d;
+  background-color: #000;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.25s;
+  transition: opacity 0.25s;
 }
 button:hover {
-  background-color: #15a06f;
+  opacity: 0.8;
 }
 button:focus,
 button:focus-visible {
-  outline: 2px solid #19c37d;
-}
-
-input,
-textarea {
-  background-color: #40414f;
-  color: #ececf1;
-  border: 1px solid #565869;
-  border-radius: 4px;
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
 
 .card {
-  background-color: #444654;
-  border: 1px solid #565869;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem;
 }
 
