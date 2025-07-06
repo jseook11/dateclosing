@@ -8,6 +8,7 @@ const DeviceRegistration = () => {
   const [checking, setChecking] = useState(true);
   const [isRegistered, setIsRegistered] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [storedNickname, setStoredNickname] = useState('');
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const DeviceRegistration = () => {
         .maybeSingle();
 
       if (data) {
+        setStoredNickname(data.nickname);
         setIsRegistered(true);
       } else if (error) {
         console.error('Device lookup error:', error.message);
@@ -47,6 +49,7 @@ const DeviceRegistration = () => {
       console.error('Registration failed:', error.message);
       setErrorMsg('등록에 실패했습니다.');
     } else {
+      setStoredNickname(nickname.trim());
       setIsRegistered(true);
     }
   };
@@ -56,7 +59,7 @@ const DeviceRegistration = () => {
   }
 
   if (isRegistered) {
-    return <RootPage />;
+    return <RootPage storedNickname={storedNickname} />;
   }
 
   return (
