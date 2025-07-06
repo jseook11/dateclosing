@@ -9,6 +9,7 @@ const DeviceRegistration = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [nickname, setNickname] = useState('');
   const [storedNickname, setStoredNickname] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
@@ -20,12 +21,13 @@ const DeviceRegistration = () => {
 
       const { data, error } = await supabase
         .from('devices')
-        .select('nickname')
+        .select('nickname, isadmin')
         .eq('device_id', id)
         .maybeSingle();
 
       if (data) {
         setStoredNickname(data.nickname);
+        setIsAdmin(Boolean(data.isadmin));
         setIsRegistered(true);
       } else if (error) {
         console.error('Device lookup error:', error.message);
@@ -59,7 +61,7 @@ const DeviceRegistration = () => {
   }
 
   if (isRegistered) {
-    return <RootPage storedNickname={storedNickname} />;
+    return <RootPage storedNickname={storedNickname} isAdmin={isAdmin} />;
   }
 
   return (

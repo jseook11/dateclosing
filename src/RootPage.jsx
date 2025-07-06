@@ -11,7 +11,7 @@ const getHeadingDate = () => {
   return `${months}월 ${day}일 (${weekday})`;
 };
 
-const RootPage = ({ storedNickname = '' }) => {
+const RootPage = ({ storedNickname = '', isAdmin = false }) => {
   const [deviceId, setDeviceId] = useState('');
   const [nickname, setNickname] = useState(storedNickname);
   const [editingName, setEditingName] = useState(false);
@@ -22,6 +22,14 @@ const RootPage = ({ storedNickname = '' }) => {
     suggestion: { value: 'no', detail: '' },
     question: { value: 'no', detail: '' },
   });
+
+  const adminLink = isAdmin ? (
+    <div className="text-right mb-4">
+      <a href="/admin" className="px-3 py-1 bg-green-500 text-white rounded">
+        대시보드 가기
+      </a>
+    </div>
+  ) : null;
 
   useEffect(() => {
     setNickname(storedNickname);
@@ -122,6 +130,7 @@ const RootPage = ({ storedNickname = '' }) => {
   if (alreadySubmitted) {
     return (
       <div className="p-4 max-w-xl mx-auto">
+        {adminLink}
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-2">내 정보</h2>
           {!editingName ? (
@@ -151,6 +160,7 @@ const RootPage = ({ storedNickname = '' }) => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
+      {adminLink}
       <div className="bg-white p-4 rounded-lg shadow-md mb-4">
         <h2 className="text-lg font-semibold mb-2">내 정보</h2>
         {!editingName ? (

@@ -7,6 +7,7 @@ const AdminPage = () => {
   const [authorized, setAuthorized] = useState(false);
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [records, setRecords] = useState([]);
+  const [counts, setCounts] = useState({ yes: 0, no: 0 });
 
   const fetchRecords = async (selected) => {
     const { data, error } = await supabase
@@ -16,9 +17,13 @@ const AdminPage = () => {
       .order('created_at', { ascending: false });
     if (!error) {
       setRecords(data || []);
+      const yes = (data || []).filter(r => r.pain_value === 'yes').length;
+      const no = (data || []).filter(r => r.pain_value !== 'yes').length;
+      setCounts({ yes, no });
     } else {
       console.error('failed to fetch records:', error.message);
       setRecords([]);
+      setCounts({ yes: 0, no: 0 });
     }
   };
 
@@ -60,6 +65,22 @@ const AdminPage = () => {
           className="w-full border rounded p-2"
         />
       </div>
+      {records.length > 0 && (
+        <div className="bg-white p-4 rounded-lg shadow-md mb-4 text-center space-y-4">
+          <p className="font-semibold">환자 (예: {counts.yes}, 아니요: {counts.no})</p>
+          <div className="relative w-40 h-40 mx-auto">
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: `conic-gradient(#60a5fa ${counts.yes + counts.no ? (counts.yes/(counts.yes+counts.no))*100 : 0}%, #e5e7eb 0)`
+              }}
+            ></div>
+            <div className="absolute inset-3 bg-white rounded-full flex items-center justify-center">
+              {counts.yes + counts.no ? Math.round((counts.yes/(counts.yes+counts.no))*100) : 0}%
+            </div>
+          </div>
+        </div>
+      )}
       <div className="space-y-4">
         {records.length === 0 ? (
           <div className="bg-white p-4 rounded-lg shadow-md">조회된 데이터가 없습니다.</div>
