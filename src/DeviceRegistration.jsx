@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import supabase from './lib/supabase';
 import RootPage from './RootPage';
+import './index.css';
 
 const DeviceRegistration = () => {
   const [deviceId, setDeviceId] = useState(null);
