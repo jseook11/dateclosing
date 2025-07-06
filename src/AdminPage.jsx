@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import supabase from './lib/supabase';
-import './index.css';
 
 const AdminPage = () => {
   const [loading, setLoading] = useState(true);
