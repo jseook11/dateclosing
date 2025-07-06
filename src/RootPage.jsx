@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import supabase from './lib/supabase';
 
-const RootPage = () => {
+const RootPage = ({ storedNickname = '' }) => {
   const [deviceId, setDeviceId] = useState('');
+  const [nickname, setNickname] = useState(storedNickname);
+  const [editingName, setEditingName] = useState(false);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [answers, setAnswers] = useState({
@@ -11,6 +13,10 @@ const RootPage = () => {
     suggestion: { value: 'no', detail: '' },
     question: { value: 'no', detail: '' },
   });
+
+  useEffect(() => {
+    setNickname(storedNickname);
+  }, [storedNickname]);
 
   useEffect(() => {
     const detectAndCheckSubmission = async () => {
@@ -61,6 +67,20 @@ const RootPage = () => {
     }));
   };
 
+  const handleNameSave = async () => {
+    const trimmed = nickname.trim();
+    if (!trimmed) return;
+    const { error } = await supabase
+      .from('devices')
+      .update({ nickname: trimmed })
+      .eq('device_id', deviceId);
+    if (!error) {
+      setEditingName(false);
+    } else {
+      alert('닉네임 업데이트 실패');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { error } = await supabase.from('daily_checkin').insert({
@@ -93,6 +113,21 @@ const RootPage = () => {
   if (alreadySubmitted) {
     return (
       <div className="p-4 max-w-xl mx-auto">
+        <div className="card">
+          <h2 className="text-lg font-semibold mb-2">내 정보</h2>
+          {!editingName ? (
+            <div>
+              <p className="mb-2">닉네임: {nickname}</p>
+              <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded">수정</button>
+            </div>
+          ) : (
+            <div>
+              <input className="w-full border rounded p-2 mb-2" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+              <button type="button" onClick={handleNameSave} className="mr-2 px-2 py-1 bg-blue-500 text-white rounded">저장</button>
+              <button type="button" onClick={() => { setNickname(storedNickname); setEditingName(false); }} className="px-2 py-1 bg-gray-200 rounded">취소</button>
+            </div>
+          )}
+        </div>
         <h2 className="text-xl font-semibold text-green-700">오늘은 이미 제출하셨습니다 😊</h2>
         {submittedData && (
           <div className="mt-4 space-y-2 bg-gray-100 p-4 rounded">
@@ -107,6 +142,21 @@ const RootPage = () => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
+      <div className="card mb-4">
+        <h2 className="text-lg font-semibold mb-2">내 정보</h2>
+        {!editingName ? (
+          <div>
+            <p className="mb-2">닉네임: {nickname}</p>
+            <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded">수정</button>
+          </div>
+        ) : (
+          <div>
+            <input className="w-full border rounded p-2 mb-2" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+            <button type="button" onClick={handleNameSave} className="mr-2 px-2 py-1 bg-blue-500 text-white rounded">저장</button>
+            <button type="button" onClick={() => { setNickname(storedNickname); setEditingName(false); }} className="px-2 py-1 bg-gray-200 rounded">취소</button>
+          </div>
+        )}
+      </div>
       <h1 className="text-2xl font-bold mb-4">오늘의 체크인</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {['pain', 'suggestion', 'question'].map((key) => (
