@@ -5,6 +5,7 @@ import supabase from './lib/supabase';
 const RootPage = () => {
   const [deviceId, setDeviceId] = useState('');
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
   const [answers, setAnswers] = useState({
     pain: { value: 'no', detail: '' },
     suggestion: { value: 'no', detail: '' },
@@ -21,11 +22,17 @@ const RootPage = () => {
       const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
       const { data, error } = await supabase
         .from('daily_checkin')
-        .select('id')
+        .select('pain_value, pain_detail, suggestion_value, suggestion_detail, question_value, question_detail')
         .eq('device_id', id)
-        .eq('date', today);
+        .eq('date', today)
+        .maybeSingle();
 
-      if (data && data.length > 0) {
+      if (error) {
+        console.error('❌ 데이터 조회 실패:', error.message);
+      }
+
+      if (data) {
+        setSubmittedData(data);
         setAlreadySubmitted(true);
       }
     };
@@ -71,6 +78,14 @@ const RootPage = () => {
       alert('제출에 실패했어요.');
     } else {
       alert('제출 완료! 감사합니다.');
+      setSubmittedData({
+        pain_value: answers.pain.value,
+        pain_detail: answers.pain.detail,
+        suggestion_value: answers.suggestion.value,
+        suggestion_detail: answers.suggestion.detail,
+        question_value: answers.question.value,
+        question_detail: answers.question.detail,
+      });
       setAlreadySubmitted(true);
     }
   };
@@ -79,6 +94,13 @@ const RootPage = () => {
     return (
       <div className="p-4 max-w-xl mx-auto">
         <h2 className="text-xl font-semibold text-green-700">오늘은 이미 제출하셨습니다 😊</h2>
+        {submittedData && (
+          <div className="mt-4 space-y-2 bg-gray-100 p-4 rounded">
+            <p>아픈 곳: {submittedData.pain_value === 'yes' ? submittedData.pain_detail || '예' : '아니요'}</p>
+            <p>건의사항: {submittedData.suggestion_value === 'yes' ? submittedData.suggestion_detail || '예' : '아니요'}</p>
+            <p>궁금한 점: {submittedData.question_value === 'yes' ? submittedData.question_detail || '예' : '아니요'}</p>
+          </div>
+        )}
       </div>
     );
   }
