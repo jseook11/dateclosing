@@ -56,7 +56,7 @@ const AdminPage = () => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <div className="bg-white p-4 rounded-lg shadow-md mb-4">
+      <div className="card mb-4">
         <h1 className="text-xl font-bold mb-2">관리자 뷰</h1>
         <input
           type="date"
@@ -66,7 +66,7 @@ const AdminPage = () => {
         />
       </div>
       {records.length > 0 && (
-        <div className="bg-white p-4 rounded-lg shadow-md mb-4 text-center space-y-4">
+        <div className="card mb-4 text-center space-y-4">
           <p className="font-semibold">환자 (예: {counts.yes}, 아니요: {counts.no})</p>
           <div className="relative w-40 h-40 mx-auto">
             <div
@@ -83,10 +83,10 @@ const AdminPage = () => {
       )}
       <div className="space-y-4">
         {records.length === 0 ? (
-          <div className="bg-white p-4 rounded-lg shadow-md">조회된 데이터가 없습니다.</div>
+          <div className="card">조회된 데이터가 없습니다.</div>
         ) : (
           records.map((r) => (
-            <div key={r.id} className="bg-white p-4 rounded-lg shadow-md space-y-2">
+            <div key={r.id} className="card space-y-2">
               <p><strong>이름:</strong> {r.devices?.nickname || ''}</p>
               <p><strong>환자여부:</strong> {r.pain_value === 'yes' ? (r.pain_detail || '예') : '아니오'}</p>
               <p><strong>건의사항:</strong> {r.suggestion_value === 'yes' ? (r.suggestion_detail || '예') : '없음'}</p>
