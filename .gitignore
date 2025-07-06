@@ -24,7 +24,5 @@ dist-ssr
 *.sw?
 
 #비밀파일들
-vite.config.js
-eslint.config.js
 backend/.env
 .env
