@@ -26,7 +26,7 @@ const RootPage = ({ storedNickname = '', isAdmin = false }) => {
 
   const adminLink = isAdmin ? (
     <div className="text-right mb-4">
-      <a href="/admin" className="px-3 py-1 bg-green-500 text-white rounded">
+      <a href="/admin" className="px-3 py-1 bg-green-500 text-black rounded">
         대시보드 가기
       </a>
     </div>
@@ -137,7 +137,7 @@ const RootPage = ({ storedNickname = '', isAdmin = false }) => {
           {!editingName ? (
             <div>
               <p className="mb-2">닉네임: {nickname}</p>
-              <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded">수정</button>
+              <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded" text-black>수정</button>
             </div>
           ) : (
             <div>
@@ -167,7 +167,7 @@ const RootPage = ({ storedNickname = '', isAdmin = false }) => {
         {!editingName ? (
           <div>
             <p className="mb-2">닉네임: {nickname}</p>
-            <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded">수정</button>
+            <button type="button" onClick={() => setEditingName(true)} className="px-2 py-1 bg-gray-200 rounded text-black">수정</button>
           </div>
         ) : (
           <div>
