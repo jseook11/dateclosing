@@ -24,8 +24,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  justify-content: center;
   padding: 2rem;
   min-width: 320px;
   min-height: 100vh;
@@ -86,7 +84,7 @@ button:focus-visible {
 .mt-4 { margin-top: 1rem; }
 .w-full { width: 100%; }
 .max-w-md { max-width: 28rem; }
-.max-w-xl { max-width: 36rem; }
+.max-w-xl { max-width: 100%; }
 .mx-auto { margin-left: auto; margin-right: auto; }
 .text-lg { font-size: 1.125rem; }
 .text-xl { font-size: 1.25rem; }

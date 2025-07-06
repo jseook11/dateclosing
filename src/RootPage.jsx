@@ -85,6 +85,14 @@ const RootPage = ({ storedNickname = '', isAdmin = false }) => {
     }));
   };
 
+  const handleSetAllNo = () => {
+    setAnswers({
+      pain: { value: 'no', detail: '' },
+      suggestion: { value: 'no', detail: '' },
+      question: { value: 'no', detail: '' },
+    });
+  };
+
   const handleNameSave = async () => {
     const trimmed = nickname.trim();
     if (!trimmed) return;
@@ -180,6 +188,13 @@ const RootPage = ({ storedNickname = '', isAdmin = false }) => {
       <h1 className="text-2xl font-bold mb-4">{getHeadingDate()} 상향식 일일결산</h1>
       <div className="card">
       <form onSubmit={handleSubmit} className="space-y-6">
+        <button
+          type="button"
+          onClick={handleSetAllNo}
+          className="px-2 py-1 bg-gray-200 rounded mb-2"
+        >
+          모두 아니요
+        </button>
         {['pain', 'suggestion', 'question'].map((key) => (
           <div key={key}>
             <p className="font-semibold mb-1">
