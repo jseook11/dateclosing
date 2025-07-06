@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import supabase from './lib/supabase';
 
+const getHeadingDate = () => {
+  const d = new Date();
+  const months = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const weekday = weekdayNames[d.getDay()];
+  return `${months}월 ${day}일 (${weekday})`;
+};
+
 const RootPage = ({ storedNickname = '' }) => {
   const [deviceId, setDeviceId] = useState('');
   const [nickname, setNickname] = useState(storedNickname);
@@ -157,7 +166,8 @@ const RootPage = ({ storedNickname = '' }) => {
           </div>
         )}
       </div>
-      <h1 className="text-2xl font-bold mb-4">오늘의 체크인</h1>
+      <h1 className="text-2xl font-bold mb-4">{getHeadingDate()} 상향식 일일결산</h1>
+      <div className="card">
       <form onSubmit={handleSubmit} className="space-y-6">
         {['pain', 'suggestion', 'question'].map((key) => (
           <div key={key}>
@@ -205,6 +215,7 @@ const RootPage = ({ storedNickname = '' }) => {
           제출하기
         </button>
       </form>
+      </div>
     </div>
   );
 };
