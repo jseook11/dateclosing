@@ -63,7 +63,7 @@ const DeviceRegistration = () => {
   }
 
   return (
-    <div className="card p-4 max-w-md mx-auto">
+    <div className="bg-white p-4 rounded-lg shadow-md max-w-md mx-auto">
       <h2 className="text-xl font-bold mb-4">닉네임 등록</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

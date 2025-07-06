@@ -122,7 +122,7 @@ const RootPage = ({ storedNickname = '' }) => {
   if (alreadySubmitted) {
     return (
       <div className="p-4 max-w-xl mx-auto">
-        <div className="card">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-2">내 정보</h2>
           {!editingName ? (
             <div>
@@ -151,7 +151,7 @@ const RootPage = ({ storedNickname = '' }) => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <div className="card mb-4">
+      <div className="bg-white p-4 rounded-lg shadow-md mb-4">
         <h2 className="text-lg font-semibold mb-2">내 정보</h2>
         {!editingName ? (
           <div>
@@ -167,7 +167,7 @@ const RootPage = ({ storedNickname = '' }) => {
         )}
       </div>
       <h1 className="text-2xl font-bold mb-4">{getHeadingDate()} 상향식 일일결산</h1>
-      <div className="card">
+      <div className="bg-white p-4 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
         {['pain', 'suggestion', 'question'].map((key) => (
           <div key={key}>
